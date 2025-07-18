@@ -1,27 +1,22 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Simulação de banco de dados 
-const users = [];
+const users = []; // Aqui usamos um array para simular um banco de dados temporário
 
 const registerUser = async (req, res) => {
   const { nome, sobrenome, email, senha } = req.body;
 
-  // Validar dados básicos
   if (!nome || !sobrenome || !email || !senha) {
     return res.status(400).json({ error: 'Preencha todos os campos' });
   }
 
-  // Verificar se usuário já existe
-  const userExists = users.find(u => u.email === email);
+  const userExists = users.find(user => user.email === email);
   if (userExists) {
     return res.status(400).json({ error: 'Usuário já cadastrado' });
   }
 
-  // Criptografar a senha
   const hashedPassword = await bcrypt.hash(senha, 10);
 
-  // Salvar usuário
   const newUser = { id: users.length + 1, nome, sobrenome, email, senha: hashedPassword };
   users.push(newUser);
 
@@ -35,7 +30,7 @@ const loginUser = async (req, res) => {
     return res.status(400).json({ error: 'Preencha email e senha' });
   }
 
-  const user = users.find(u => u.email === email);
+  const user = users.find(user => user.email === email);
   if (!user) {
     return res.status(400).json({ error: 'Usuário não encontrado' });
   }
@@ -45,22 +40,17 @@ const loginUser = async (req, res) => {
     return res.status(401).json({ error: 'Senha incorreta' });
   }
 
-  // Criar token JWT
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, {
-    expiresIn: '1h',
-  });
+  const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, { expiresIn: '1h' });
 
   return res.json({ token });
 };
 
 const getProfile = (req, res) => {
-  // O middleware já colocou o usuário no req.user
-  const user = users.find(u => u.id === req.user.id);
+  const user = users.find(user => user.id === req.user.id);
   if (!user) {
     return res.status(404).json({ error: 'Usuário não encontrado' });
   }
 
-  // Retorna dados do perfil (sem a senha)
   const { senha, ...userData } = user;
   return res.json(userData);
 };
