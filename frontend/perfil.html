@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil da Usuária</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      background-color: #f0f0f7;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    h2 {
+      color: #5c6bc0;
+      margin-bottom: 20px;
+    }
+    #perfil p {
+      margin: 6px 0;
+    }
+    #erro {
+      color: red;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #5c6bc0;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3f51b5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Bem-vinda, <span id="usuario">Usuário</span> 💜</h2>
+    <div id="perfil"></div>
+    <div id="erro"></div>
+    <button id="logout">Sair</button>
+  </div>
+
+  <script>
+    // Verifica se há token
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+    // Carrega perfil
+    async function carregarPerfil() {
+      try {
+        const resposta = await fetch("http://localhost:3000/api/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        const dados = await resposta.json();
+
+        if (resposta.ok) {
+          document.getElementById("usuario").textContent = dados.user.username || "Usuária";
+
+          const html =
+            "<p><strong>ID:</strong> " + dados.user.id + "</p>" +
+            "<p><strong>Username:</strong> " + dados.user.username + "</p>" +
+            "<p><strong>Email:</strong> " + (dados.user.email || "(não definido)") + "</p>" +
+            "<p><strong>Criado em:</strong> " +
+            new Date(dados.user.criado_em || dados.user.createdAt).toLocaleString() + "</p>";
+
+          document.getElementById("perfil").innerHTML = html;
+          document.getElementById("erro").textContent = "";
+        } else {
+          document.getElementById("erro").textContent = dados.message || "Erro ao carregar perfil.";
+        }
+      } catch (err) {
+        document.getElementById("erro").textContent = "Erro ao conectar com a API.";
+      }
+    }
+
+    carregarPerfil();
+
+    // Botão de logout
+    document.getElementById("logout").addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+    });
+  </script>
+</body>
+</html>

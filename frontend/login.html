@@ -79,6 +79,10 @@
         if (response.ok && result.token) {
           localStorage.setItem('token', result.token);
           alert('Login realizado com sucesso!');
+
+          localStorage.removeItem('token');
+          window.location.href = 'login.html';
+
           // Aqui você pode redirecionar para uma página protegida
         } else {
           alert(result.message || 'Falha no login');

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Portal da Luciana</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #824ff2, #5c6bc0);
+      color: white;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 50px;
+      border-radius: 12px;
+      text-align: center;
+      backdrop-filter: blur(6px);
+      animation: fadeIn 1.2s ease-out;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2.2rem;
+      animation: slideDown 1s ease-out;
+    }
+
+    p {
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    button {
+      background: white;
+      color: #824ff2;
+      border: none;
+      padding: 12px 22px;
+      margin: 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: #f0f0f0;
+      transform: scale(1.05);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="saudacao">💜 Bem-vinda!</h1>
+    <p id="info">Acesse uma das opções abaixo para continuar.</p>
+    <div id="botoes"></div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const div = document.getElementById("botoes");
+
+    if (token) {
+      fetch("http://localhost:3000/api/me", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user && data.user.username) {
+          document.getElementById("saudacao").textContent = `💜 Olá, ${data.user.username}!`;
+          document.getElementById("info").textContent = "Seu acesso está ativo.";
+        }
+
+        div.innerHTML = `
+          <button onclick="location.href='perfil.html'">Acessar Perfil</button>
+          <button onclick="logout()">Sair</button>
+        `;
+      })
+      .catch(() => {
+        div.innerHTML = `
+          <button onclick="location.href='login.html'">Fazer Login</button>
+          <button onclick="location.href='cadastro.html'">Cadastrar</button>
+        `;
+      });
+    } else {
+      div.innerHTML = `
+        <button onclick="location.href='login.html'">Fazer Login</button>
+        <button onclick="location.href='cadastro.html'">Cadastrar</button>
+      `;
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      location.reload();
+    }
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const User = require('./models/Usuario'); // Modelo Sequelize
+const User = require('../../models/Usuario'); // Modelo Sequelize
 
 // Cadastra um novo usuário no banco de dados.
 exports.registerUser = async (req, res) => {
@@ -55,6 +55,9 @@ exports.loginUser = async (req, res) => {
 
 // Retorna os dados do usuário autenticado.
 exports.getProfile = async (req, res) => {
+  const { id, username } = req.user;
+
+  
   try {
     const user = await User.findByPk(req.user.id, {
       attributes: ['id', 'username', 'createdAt']
@@ -63,7 +66,14 @@ exports.getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
-
+res.json({
+  message: `Perfil carregado com sucesso 💜`,
+  user: {
+    id: user.id,
+    username: user.username,
+    criado_em: user.createdAt
+  }
+});
     res.json({ message: 'Perfil do usuário', user });
   } catch (error) {
     res.status(500).json({ message: 'Erro ao buscar perfil', error });

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lista de Usuárias</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f5fc;
+      padding: 40px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px #ccc;
+    }
+    h2 {
+      color: #5c6bc0;
+      margin-bottom: 20px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    #erro {
+      color: red;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🧑‍💻 Usuárias cadastradas</h2>
+    <ul id="lista"></ul>
+    <div id="erro"></div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "login.html";
+    }
+
+    async function carregarUsuarios() {
+      try {
+        const response = await fetch("http://localhost:3000/api/users", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const resultado = await response.json();
+
+        if (response.ok) {
+          const lista = document.getElementById("lista");
+          lista.innerHTML = resultado.users.map(u =>
+            `<li><strong>${u.username}</strong> — ${u.email || "(sem email)"}</li>`
+          ).join('');
+        } else {
+          document.getElementById("erro").textContent = resultado.message;
+        }
+      } catch (err) {
+        document.getElementById("erro").textContent = "Erro ao conectar com o servidor.";
+      }
+    }
+
+    carregarUsuarios();
+  </script>
+</body>
+</html>
