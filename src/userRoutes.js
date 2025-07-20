@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const authMiddleware = require('../middlewares/authMiddleware');
+const userController = require('./userController');
+const authMiddleware = require('./middlewares');
 
-// Rota para cadastro de usuário
 router.post('/user', userController.registerUser);
-
-// Rota para login
 router.post('/login', userController.loginUser);
-
-// Rota protegida para obter perfil
 router.get('/me', authMiddleware, userController.getProfile);
+
+router.get('/ping', (req, res) => {
+  res.json({ message: 'Rota funcionando corretamente 🚀' });
+});
 
 module.exports = router;

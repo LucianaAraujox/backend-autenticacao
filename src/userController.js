@@ -1,72 +1,71 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const User = require('./models/Usuario'); // Modelo Sequelize
 
-// Simulação de banco de dados 
-const users = [];
+// Cadastra um novo usuário no banco de dados.
+exports.registerUser = async (req, res) => {
+  const { username, password } = req.body;
 
-const registerUser = async (req, res) => {
-  const { nome, sobrenome, email, senha } = req.body;
+  try {
+    // Verifica se o usuário já existe
+    const existingUser = await User.findOne({ where: { username } });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Nome de usuário já está em uso.' });
+    }
 
-  // Validar dados básicos
-  if (!nome || !sobrenome || !email || !senha) {
-    return res.status(400).json({ error: 'Preencha todos os campos' });
+    // Criptografa a senha e salva no banco
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({ username, password: hashedPassword });
+
+    res.status(201).json({ message: 'Usuário criado com sucesso', id: newUser.id });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao registrar usuário', error });
   }
-
-  // Verificar se usuário já existe
-  const userExists = users.find(u => u.email === email);
-  if (userExists) {
-    return res.status(400).json({ error: 'Usuário já cadastrado' });
-  }
-
-  // Criptografar a senha
-  const hashedPassword = await bcrypt.hash(senha, 10);
-
-  // Salvar usuário
-  const newUser = { id: users.length + 1, nome, sobrenome, email, senha: hashedPassword };
-  users.push(newUser);
-
-  return res.status(201).json({ message: 'Usuário cadastrado com sucesso!' });
 };
 
-const loginUser = async (req, res) => {
-  const { email, senha } = req.body;
+// Autentica o usuário e retorna um token JWT.
+exports.loginUser = async (req, res) => {
+  const { username, password } = req.body;
 
-  if (!email || !senha) {
-    return res.status(400).json({ error: 'Preencha email e senha' });
+  try {
+    // Busca usuário no banco
+    const user = await User.findOne({ where: { username } });
+    if (!user) {
+      return res.status(401).json({ message: 'Usuário não encontrado' });
+    }
+
+    // Compara senhas
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Senha incorreta' });
+    }
+
+    // Gera token com ID do usuário
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao autenticar usuário', error });
   }
-
-  const user = users.find(u => u.email === email);
-  if (!user) {
-    return res.status(400).json({ error: 'Usuário não encontrado' });
-  }
-
-  const isPasswordValid = await bcrypt.compare(senha, user.senha);
-  if (!isPasswordValid) {
-    return res.status(401).json({ error: 'Senha incorreta' });
-  }
-
-  // Criar token JWT
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.SECRET_KEY, {
-    expiresIn: '1h',
-  });
-
-  return res.json({ token });
 };
 
-const getProfile = (req, res) => {
-  // O middleware já colocou o usuário no req.user
-  const user = users.find(u => u.id === req.user.id);
-  if (!user) {
-    return res.status(404).json({ error: 'Usuário não encontrado' });
+// Retorna os dados do usuário autenticado.
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: ['id', 'username', 'createdAt']
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    res.json({ message: 'Perfil do usuário', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar perfil', error });
   }
-
-  // Retorna dados do perfil (sem a senha)
-  const { senha, ...userData } = user;
-  return res.json(userData);
-};
-
-module.exports = {
-  registerUser,
-  loginUser,
-  getProfile,
 };
