@@ -68,7 +68,7 @@
       }
 
       try {
-        const response = await fetch('http://localhost:3000/api/login', {
+        const response = await fetch('http://localhost:3333/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
@@ -79,8 +79,6 @@
         if (response.ok && result.token) {
           localStorage.setItem('token', result.token);
           alert('Login realizado com sucesso!');
-
-          localStorage.removeItem('token');
           window.location.href = 'login.html';
 
           // Aqui você pode redirecionar para uma página protegida

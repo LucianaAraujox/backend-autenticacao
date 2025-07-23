@@ -59,7 +59,7 @@
     // Carrega perfil
     async function carregarPerfil() {
       try {
-        const resposta = await fetch("http://localhost:3000/api/me", {
+        const resposta = await fetch("http://localhost:3333/api/me", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`
@@ -93,7 +93,7 @@
     // Botão de logout
     document.getElementById("logout").addEventListener("click", () => {
       localStorage.removeItem("token");
-      window.location.href = "login.html";
+      window.location.href = "perfil.html";
     });
   </script>
 </body>
