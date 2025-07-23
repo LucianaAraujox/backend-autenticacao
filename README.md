@@ -1,15 +1,20 @@
-Sistema de Autenticação de Usuários
+🔐 Sistema de Autenticação com Node.js
+
+🔗 Projeto publicado no GitHub: [LucianaAraujox/backend-autenticacao](https://github.com/LucianaAraujox/backend-autenticacao)
+
 
 Este projeto é um sistema web para cadastro, login, visualização de perfil e listagem de usuárias. Foi desenvolvido com HTML, CSS, JavaScript no frontend e Node.js com Express no backend.
 
-⚙️ Tecnologias utilizadas
+⚙️ Tecnologias usadas
 
-- HTML + CSS + JavaScript (Frontend)
-- Node.js + Express (Backend)
-- PostgreSQL (Banco de dados)
-- Sequelize (ORM)
-- JSON Web Token (Autenticação)
-- dotenv + cors + bcrypt
+- **FrontEnd:** HTML, CSS, JavaScript
+- **Backend:** Node.js, Express
+- **Banco de Dados:** PostgreSQL
+- **ORM:** Sequelize
+- **Autenticação:** JSON Web Token (JWT), bcrypt
+- **Testes:** Postman
+- **Utilitários:** dotenv, cors
+
 
 📁 Arquitetura do Projeto
 
@@ -22,7 +27,7 @@ backend-autenticacao/
 │
 ├── config/
 │   ├── config.json         # usado pelo Sequelize
-│   └── database.js         # conexão com MySQL usando Sequelize
+│   └── database.js         # conexão com PostgreSQL usando Sequelize
 │
 ├── models/
 │   ├── index.js            # carrega os modelos e instância sequelize
@@ -59,19 +64,28 @@ backend-autenticacao/
 └── node_modules
 
 
+🚀 Funcionalidades
+
+- Cadastro de usuárias com hash de senha (letras e números)
+- Login e geração de token JWT
+- Visualização de perfil da usuária autenticada
+- Testes com Postman e navegador
+- Banco de dados estruturado com Sequelize
+
+
 📦 Rotas da API
 
 | Método | Rota        | Descrição                        
 
-| POST   | /api/user   | Cadastrar nova usuária           
+| POST   | /api/user   | Cadastrar novo usuário          
 | POST   | /api/login  | Autenticar e retornar token JWT  
 | GET    | /api/me     | Retorna dados da usuário logado  
 | GET    | /api/users  | Lista todos os usuários          
 | GET    | /api/ping   | Teste de status da API       
 
-A rota /api/me exige envio de token no header:
+📌 Para acessar `/api/me` e `/api/users`, envie o token no header:
 
-Authorization: Bearer seu_token_jwt
+Authorization: Bearer token 
 
 >> Como executar
 
@@ -110,7 +124,7 @@ DB_HOST=localhost
 JWT_SECRET=sua_chave_secreta
 
 
-3. Abra os arquivos HTML no navegador com Live Server ou direto localmente.
+3. Abra os arquivos HTML no navegador com Live Server
 
 🛠️ Explicando os comandos Git detalhadamente
 
@@ -125,4 +139,10 @@ JWT_SECRET=sua_chave_secreta
 | git push -u origin main     | Envia os commits locais para a branch `main` do repositório no GitHub      
 
 
+![Cadastro funcionando](docs/img/cadastro-postman.png)
+![Login funcionando](docs/img/token-login-postman.png)
+![Perfil carregado](docs/img/perfil-postman.png)
+
+
+~ Projeto desenvolvido por Luciana com muito café, desespero e persistência!  
 

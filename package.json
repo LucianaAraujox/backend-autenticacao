@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "kill": "for /f \"tokens=5\" %a in ('netstat -ano ^| findstr :3333') do taskkill /PID %a /F",
     "start": "node backend/src/server.js",
-    "dev": "nodemon backend/src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "reset": "npm run kill && npm run start"
   },
   "author": "",
   "license": "ISC",

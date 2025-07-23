@@ -3,7 +3,6 @@ const Usuario = require('../../models/Usuario');
 
 const registerUser = async (req, res) => {
   try {
-  
     const {
       nomeCompleto,
       email,
@@ -34,7 +33,10 @@ const registerUser = async (req, res) => {
       id: novoUsuario.id
     });
   } catch (error) {
-    console.error('🔥 Erro interno ao cadastrar usuário:', error); 
-    res.status(500).json({ message: 'Erro ao cadastrar usuário', error });
-  }
+  console.error('🔥 Erro interno ao cadastrar usuário:', error); 
+  res.status(500).json({
+    message: 'Erro ao cadastrar usuário',
+    error: error.message || JSON.stringify(error)
+  });
+}
 };

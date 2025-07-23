@@ -65,7 +65,7 @@ const registerUser = async (req, res) => {
 // Login
 const loginUser = async (req, res) => {
   try {
-    console.log('Tentativa de login:', req.body);
+    console.log("JWT_SECRET atual:", process.env.JWT_SECRET);
 
     const { username, password } = req.body;
     const user = await Usuario.findOne({ where: { username } });
@@ -87,9 +87,13 @@ const loginUser = async (req, res) => {
 
     res.json({ token });
   } catch (error) {
-    console.error('Erro ao autenticar usuário:', error);
-    res.status(500).json({ message: 'Erro ao autenticar usuário', error });
-  }
+  console.error("🔥 Erro ao autenticar usuário:", error);
+
+  res.status(500).json({
+    message: "Erro ao autenticar usuário",
+    error: typeof error === 'object' ? JSON.stringify(error, null, 2) : String(error)
+  });
+}
 };
 // Listar usuários
 const listUsers = async (req, res) => {
