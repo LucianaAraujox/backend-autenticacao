@@ -142,6 +142,9 @@ JWT_SECRET=sua_chave_secreta
 ![Cadastro funcionando](docs/img/cadastro-postman.png)
 ![Login funcionando](docs/img/token-login-postman.png)
 ![Perfil carregado](docs/img/perfil-postman.png)
+![Tela de Cadastro](docs/img/telacadastro-frontend.png)
+![Tela de Login](docs/img/telalogin-frontend.png)
+![Tela do Perfil](docs/img/telaperfil-frontend.png)
 
 
 ~ Projeto desenvolvido por Luciana com muito café, desespero e persistência!  
