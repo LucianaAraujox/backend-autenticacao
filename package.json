@@ -6,7 +6,9 @@
   "scripts": {
     "kill": "for /f \"tokens=5\" %a in ('netstat -ano ^| findstr :3333') do taskkill /PID %a /F",
     "start": "node backend/src/server.js",
-    "reset": "npm run kill && npm run start"
+    "reset": "npm run kill && npm run start",
+    "dev": "nodemon backend/src/server.js"
+
   },
   "author": "",
   "license": "ISC",

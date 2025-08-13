@@ -1,12 +1,15 @@
+console.log("✅ Arquivo userRoutes.js carregado!");
+
 const express = require('express');
 const router = express.Router();
-const userController = require('./userController');
-const authMiddleware = require('./authMiddleware');
+const userController = require('../controllers/userController');
+const authMiddleware = require('../authMiddleware');
 
 console.log("Conteúdo do userController:", userController);
 
 // Rotas
 router.post('/user', userController.registerUser);
+router.post('/register', userController.registerUser); 
 router.post('/login', userController.loginUser);
 
 // ✅ NOVA ROTA DE EDIÇÃO DE USUÁRIO

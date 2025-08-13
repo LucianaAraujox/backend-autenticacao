@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { Usuario } = require('../../models'); // <- isso puxa do index.js, já instanciado
+const { Usuario } = require('../models'); // <- isso puxa do index.js, já instanciado
 const { Op } = require('sequelize');
 
 // Registrar novo usuário
