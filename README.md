@@ -18,50 +18,42 @@ Este projeto é um sistema web para cadastro, login, visualização de perfil e 
 
 📁 Arquitetura do Projeto
 
-backend-autenticacao/
-├── .vscode/
+backend-autenticacao/ 
+├── .vscode/ 
 │   └── settings.json
-├── .env
-├── package.json
-├── README.md               # documentação do projeto
-│
-├── config/
-│   ├── config.json         # usado pelo Sequelize
-│   └── database.js         # conexão com PostgreSQL usando Sequelize
-│
-├── models/
-│   ├── index.js            # carrega os modelos e instância sequelize
-│   ├── usuario.js          # definição da tabela Usuario
-│   └── perfil.js           # definição da tabela Perfil
-│
-├── migrations/             
-│
-├── src/
-│   ├── controllers/
-│   │   ├── userController.js     # funções de autenticação e perfil
-│   │   └── perfilController.js  
-│   │
-│   ├── routes/
-│   │   ├── userRoutes.js         # cadastro, login, perfil
-│   │   └── pingRoutes.js         # rota de teste de conexão
-│   │
-│   ├── middlewares/
-│   │   └── middlewares.js        # tratamento de autenticação, erros etc.
-│   │
-│   ├── server.js                 # inicia app Express
-│   └── index.js                  # carrega os modelos e instancia
-│
-├── docs/
-│   └── descritivo.md             # introdução
-│
-├── frontend/
-│   ├── index.html
-│   ├── cadastro.html
-│   ├── login.html
-│   ├── perfil.html
-│   └── usuarios.html
-│
-└── node_modules
+├── .env                      # Variáveis de ambiente 
+├── .gitignore                # Arquivos ignorados pelo Git 
+├── README.md                 # Documentação do projeto 
+├── package.json              # Dependências e scripts 
+├── package-lock.json         # Lockfile do npm 
+├── package-Luciana.json      # Versão alternativa
+├── backend/ 
+│   └── src/
+├── config/ 
+│   ├── config.js               # Configurações gerais 
+│   └── database.js             # Conexão com PostgreSQL 
+├── controllers/ 
+│   └── userController.js       # Lógica de autenticação e perfil 
+├── models/ 
+│   ├── index.js                # Instância Sequelize 
+│   ├── perfil.js               # Modelo Perfil 
+│   └── usuario.js              # Modelo Usuario 
+├── routes/ 
+│   ├── pingRoutes.js           # Rota de teste 
+│   ├── registerUser.js         # Registro de usuário 
+│   └── userRoutes.js           # Rotas principais 
+├── authMiddleware.js           # Autenticação via token 
+├── middlewares.js              # Tratamento de erros, etc. 
+├── server.js                   # Inicialização do Express
+├── docs/ 
+│   ├── img/                            # Imagens de apoio 
+│   └── descritivo.md                   # Introdução e explicações
+├── frontend/ 
+│   ├── index.html                      # Página inicial 
+│   ├── cadastro.html                   # Formulário de registro 
+│   ├── login.html                      # Formulário de login 
+│   ├── perfil.html                     # Visualização de perfil 
+│   └── usuarios.html                   # Lista de usuários
 
 
 🚀 Funcionalidades
